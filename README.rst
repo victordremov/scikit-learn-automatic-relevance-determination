@@ -17,22 +17,18 @@
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/ARM/badge/?version=latest
 .. _ReadTheDocs: https://ARM.readthedocs.io/en/latest/?badge=latest
 
-project-template - A template for scikit-learn contributions
+Automatic Relevance Determination
 ============================================================
 
-.. _scikit-learn: https://scikit-learn.org
+Bayesian regression techniques can be used to include regularization parameters in the estimation procedure: the regularization parameter is not set in a hard sense but tuned to the data at hand.
 
-**project-template** is a template project for scikit-learn_ compatible
-extensions.
+This can be done by introducing uninformative priors over the hyper parameters of the model. The $l_2$
+ regularization used in Ridge regression and classification is equivalent to finding a maximum a posteriori estimation under a Gaussian prior over the coefficients $w$ with precision $\lambda^{-1}$. Instead of setting $\lambda$ manually, it is possible to treat it as a random variable to be estimated from the data.
 
-It aids development of estimators that can be used in scikit-learn pipelines
-and (hyper)parameter search, while facilitating testing (including some API
-compliance), documentation, open source development, packaging, and continuous
-integration.
+To obtain a fully probabilistic model, the output $y$ is assumed to be Gaussian distributed around $Xw$:
 
-.. _documentation: https://ARM.readthedocs.io/en/latest/quick_start.html
+$$
+    p(y | X, w, \alpha) = N(y | Xw, alpha)
+$$
 
-Refer to the documentation_ to modify the template for your own scikit-learn
-contribution.
-
-*Thank you for cleanly contributing to the scikit-learn ecosystem!*
+where $alpha$ is again treated as a random variable that is to be estimated from the data.
