@@ -77,7 +77,7 @@ plot_gallery = True
 master_doc = 'index'
 
 # General information about the project.
-project = u'ARM'
+project = u'ARD'
 copyright = u'2016, Vighnesh Birodkar'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -85,7 +85,7 @@ copyright = u'2016, Vighnesh Birodkar'
 # built documents.
 #
 # The short X.Y version.
-from ARM import __version__
+from ARD import __version__
 version = __version__
 # The full version, including alpha/beta/rc tags.
 release = __version__
@@ -309,10 +309,10 @@ intersphinx_mapping = {
 
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
-    'doc_module': 'ARM',
+    'doc_module': 'ARD',
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {
-        'ARM': None}
+        'ARD': None}
 }
 
 def setup(app):

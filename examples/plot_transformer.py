@@ -3,11 +3,11 @@
 Plotting Template Transformer
 =============================
 
-An example plot of :class:`ARM.template.TemplateTransformer`
+An example plot of :class:`ARD.template.TemplateTransformer`
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from ARM import TemplateTransformer
+from ARD import TemplateTransformer
 
 X = np.arange(50, dtype=np.float).reshape(-1, 1)
 X /= 50

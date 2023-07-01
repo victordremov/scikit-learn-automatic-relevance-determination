@@ -8,38 +8,35 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import euclidean_distances
 
 
-class TemplateEstimator(BaseEstimator):
-    """ A template estimator to be used as a reference implementation.
-
-    For more information regarding how to build your own estimator, read more
-    in the :ref:`User Guide <user_guide>`.
+class ARDRegressor(BaseEstimator):
+    """ Automatic relevance determination
 
     Parameters
     ----------
-    demo_param : str, default='demo_param'
-        A parameter used for demonstation of how to pass and store paramters.
+    n_iterations : int, default = 10
+        Number of iterations when converging
 
     Examples
     --------
-    >>> from ARM import TemplateEstimator
+    >>> from ARD import ARDRegressor
     >>> import numpy as np
     >>> X = np.arange(100).reshape(100, 1)
     >>> y = np.zeros((100, ))
-    >>> estimator = TemplateEstimator()
+    >>> estimator = ARDRegressor()
     >>> estimator.fit(X, y)
-    TemplateEstimator()
+    ARDRegressor()
     """
-    def __init__(self, demo_param='demo_param'):
-        self.demo_param = demo_param
+    def __init__(self, n_iterations: int = 100):
+        self.n_iterations = n_iterations
 
     def fit(self, X, y):
         """A reference implementation of a fitting function.
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape (n_samples, n_features)
+        X : array-like, shape (n_samples, n_features)
             The training input samples.
-        y : array-like, shape (n_samples,) or (n_samples, n_outputs)
+        y : array-like, shape (n_samples,)
             The target values (class labels in classification, real numbers in
             regression).
 
@@ -48,7 +45,41 @@ class TemplateEstimator(BaseEstimator):
         self : object
             Returns self.
         """
-        X, y = check_X_y(X, y, accept_sparse=True)
+        assert self.n_iterations > 0
+        X, y = check_X_y(X, y, accept_sparse=False, dtype=np.float64)
+        y = y.astype(np.float64)
+        n, d = X.shape
+        t = y.reshape(n, 1)
+
+        alphas_old = np.ones((d, 1), dtype=np.float64)
+        beta_old = 1.
+
+        XT_dot_t = X.T @ t
+        XT_dot_X = X.T @ X
+
+        for iteration in range(self.n_iterations):
+            # update sigma, w_mp when A, b is fixed
+            # as parameters of the posterior distribution
+            # p(w | X, T, A, beta) ~ N(w | w_mp, sigma^(-1))
+            sigma = np.linalg.inv(beta_old * XT_dot_X + np.diag(alphas_old.reshape(-1)))
+            w_mp = beta_old * sigma @ XT_dot_t
+
+            # update A and beta by maximizing variadic lower estimate for fixed sigma, w_mp
+            sigma_diag = np.diag(sigma).reshape(d, 1)
+            beta_new = (n - (1.0 - alphas_old.T) @ sigma_diag).item() / np.linalg.norm(t - X @ w_mp) ** 2
+            alphas_new = (1.0 + alphas_old * sigma_diag) / w_mp ** 2
+            if not np.isfinite(beta_new) or not np.isfinite(alphas_new).all():
+                break
+
+            alphas_old = alphas_new
+            beta_old = beta_new
+
+        self.w_ = w_mp
+        self.sigma_ = sigma
+        self.alphas_ = alphas_old
+        self.beta_ = beta_old
+        self.n_features_in_ = d
+
         self.is_fitted_ = True
         # `fit` should always return `self`
         return self
@@ -58,7 +89,7 @@ class TemplateEstimator(BaseEstimator):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape (n_samples, n_features)
+        X : array-like, shape (n_samples, n_features)
             The training input samples.
 
         Returns
@@ -66,9 +97,9 @@ class TemplateEstimator(BaseEstimator):
         y : ndarray, shape (n_samples,)
             Returns an array of ones.
         """
-        X = check_array(X, accept_sparse=True)
+        X = check_array(X, accept_sparse=False, dtype=np.float64)
         check_is_fitted(self, 'is_fitted_')
-        return np.ones(X.shape[0], dtype=np.int64)
+        return X @ self.w_
 
 
 class TemplateClassifier(ClassifierMixin, BaseEstimator):

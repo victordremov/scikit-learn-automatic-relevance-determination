@@ -3,11 +3,11 @@
 Plotting Template Classifier
 ============================
 
-An example plot of :class:`ARM.template.TemplateClassifier`
+An example plot of :class:`ARD.template.TemplateClassifier`
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from ARM import TemplateClassifier
+from ARD import TemplateClassifier
 
 X = [[0, 0], [1, 1]]
 y = [0, 1]

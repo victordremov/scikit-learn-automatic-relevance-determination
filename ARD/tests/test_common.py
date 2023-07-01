@@ -2,14 +2,11 @@ import pytest
 
 from sklearn.utils.estimator_checks import check_estimator
 
-from ARM import TemplateEstimator
-from ARM import TemplateClassifier
-from ARM import TemplateTransformer
-
+from ARD import ARDRegressor
 
 @pytest.mark.parametrize(
     "estimator",
-    [TemplateEstimator(), TemplateTransformer(), TemplateClassifier()]
+    [ARDRegressor()]
 )
 def test_all_estimators(estimator):
     return check_estimator(estimator)
