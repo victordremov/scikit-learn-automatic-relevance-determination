@@ -22,13 +22,19 @@ Automatic Relevance Determination
 
 Bayesian regression techniques can be used to include regularization parameters in the estimation procedure: the regularization parameter is not set in a hard sense but tuned to the data at hand.
 
-This can be done by introducing uninformative priors over the hyper parameters of the model. The $l_2$
- regularization used in Ridge regression and classification is equivalent to finding a maximum a posteriori estimation under a Gaussian prior over the coefficients $w$ with precision $\lambda^{-1}$. Instead of setting $\lambda$ manually, it is possible to treat it as a random variable to be estimated from the data.
+This can be done by introducing uninformative priors over the hyper parameters of the model. The :math:`l_2` regularization used in Ridge regression and classification is equivalent to finding a maximum a posteriori estimation under a Gaussian prior over the coefficients :math:`w` with precision :math:`\lambda^{-1}`. Instead of setting :math:`\lambda` manually, it is possible to treat it as a random variable to be estimated from the data.
 
-To obtain a fully probabilistic model, the output $y$ is assumed to be Gaussian distributed around $Xw$:
+To obtain a fully probabilistic model, the output :math:`y` is assumed to be Gaussian distributed around :math:`Xw`:
 
-$$
+.. math::
     p(y | X, w, \alpha) = N(y | Xw, alpha)
-$$
 
-where $alpha$ is again treated as a random variable that is to be estimated from the data.
+where :math:`\alpha` is again treated as a random variable that is to be estimated from the data.
+
+Usage example
+-------
+Jupyter notebook with usage example: <https://github.com/victordremov/scikit-learn-automatic-relevance-determination/tree/master/examples/hello-ard.ipynb>
+
+Source code
+-------
+Source code: <https://github.com/victordremov/scikit-learn-automatic-relevance-determination/tree/master/ARD/ARDRegressor.py>
