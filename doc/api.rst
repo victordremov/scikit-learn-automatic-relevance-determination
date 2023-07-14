@@ -13,16 +13,8 @@ Estimator
    :toctree: generated/
    :template: class.rst
 
-   TemplateEstimator
+   ARDRegressor
 
-Transformer
-===========
-
-.. autosummary::
-   :toctree: generated/
-   :template: class.rst
-
-   TemplateTransformer
 
 Predictor
 =========
@@ -31,4 +23,4 @@ Predictor
    :toctree: generated/
    :template: class.rst
 
-    TemplateClassifier
+    ARDClassifier
